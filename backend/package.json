@@ -1,0 +1,13 @@
+{
+  "name": "login-system",
+  "version": "0.0.1",
+  "description": "testing login systems with nodeJs & React",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
