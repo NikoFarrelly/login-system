@@ -1,10 +1,30 @@
 import express from 'express';
+import mysql from 'mysql';
 
 const port = 4000;
 const app = express();
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'rootuser',
+    database: 'login_system_db',
+    insecureAuth: true
+})
+connection.connect();
+connection.query("SELECT * FROM users", (req, res) => console.log(res));
+// const query = async () => connection.query("SELECT * FROM users");
+// (async () => {
+//     query().then(res => console.log('query res:', res));
+// })();
 
+// connection.query("DELETE FROM users WHERE username='a'", (req,res) => console.log(res));
 app.use(express.urlencoded());
 app.use(express.json());
+
+const FailureScenario = (res) => {
+    res.status(500);
+    res.end()
+}
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -18,7 +38,7 @@ app.get('/', (req, res) => {
     res.send("Yoza!")
 })
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
     const {username, password} = req.body;
     const isValid = !!username && !!password;
     if (isValid) {
@@ -29,18 +49,36 @@ app.post('/login', (req, res) => {
     res.end()
 })
 
-app.post('/createAccount', (req, res) => {
+app.post('/createAccount', async (req, res) => {
     const {username, password} = req.body;
-    const isValid = !!username && !!password;
-    if (isValid) {
-        res.status(200)
-        res.end();
-    }
-    res.status(500);
-    res.end()
+    const user = {username, password};
+    await writeUserToDB(user).then(result => {
+        if (result) {
+            res.status(200)
+            res.end();
+        }
+        FailureScenario(res)
+    }).catch(error => {
+        console.error('e:', error);
+        FailureScenario(res);
+    });
 })
 
 app.listen(port, () => {
     console.log(`we are listening at http://localhost:${port}`)
 })
 
+const writeNewUserToDB = (user) => new Promise((res, rej) =>
+    connection.query('INSERT INTO users SET ?', user, (err, result) =>
+        err ? rej(err) : res(result.affectedRows === 1)
+    )
+);
+
+const checkUsernameExists = (username) =>
+    new Promise((res, rej) =>
+        connection.query('SELECT * FROM users WHERE username=?', [username], (err, result) =>
+            err ? rej(err) : res(result.length === 0)
+        )
+    );
+
+const writeUserToDB = async (user) => (await checkUsernameExists(user.username)) ? await writeNewUserToDB(user) : false;
