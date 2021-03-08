@@ -1,0 +1,37 @@
+.login_container {
+    background-color: rgba(252,177,191, 1);
+    padding: 25px;
+    border: 1px solid gray;
+}
+
+.input_container {
+    display: flex;
+    flex-direction: column;
+}
+
+.login_title {
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.login_input {
+    margin: 5px 0;
+    padding: 5px;
+}
+
+.input_row {
+    margin: 20px 0;
+}
+
+p {
+    padding: 0;
+    margin: 0;
+}
+
+.button_container {
+
+}
+
+.button {
+
+}
