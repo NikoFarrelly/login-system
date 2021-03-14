@@ -1,0 +1,32 @@
+.home_screen_container {
+
+}
+
+.welcome_container {
+    justify-content: center;
+    align-content: center;
+    display: flex;
+    margin-top: 35px;
+}
+
+.welcome_title {
+    font-size: 56px;
+}
+
+.sign_out_container {
+    justify-content: center;
+    align-content: center;
+    display: flex;
+    margin-top: 75px;
+    flex-direction: column;
+}
+
+.sign_out_text {
+    align-self: center;
+}
+
+.sign_out_button {
+    margin-top: 15px;
+    width: 100px;
+    align-self: center;
+}

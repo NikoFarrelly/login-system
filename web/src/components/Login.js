@@ -21,7 +21,7 @@ export const Login = () => {
         })
             .then(res => {
                 if (res.data.success) {
-                    history.push('/home');
+                    history.push('/home', {username});
                 } else {
                     setLoading(false);
                 }

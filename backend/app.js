@@ -11,13 +11,7 @@ const connection = mysql.createConnection({
     insecureAuth: true
 })
 connection.connect();
-connection.query("SELECT * FROM users", (req, res) => console.log(res));
-// const query = async () => connection.query("SELECT * FROM users");
-// (async () => {
-//     query().then(res => console.log('query res:', res));
-// })();
 
-// connection.query("DELETE FROM users WHERE username='a'", (req,res) => console.log(res));
 app.use(express.urlencoded());
 app.use(express.json());
 
@@ -90,4 +84,3 @@ const authenticateUser = (username, password) =>
             err ? rej(err) : res(result.length === 1)
         )
     );
-
