@@ -1,23 +1,30 @@
 import React from 'react';
 
-import {Login} from "./components/Login";
-import {CreateAccount} from "./components/CreateAccount";
+import {BrowserRouter, Switch, Route} from "react-router-dom";
+
 
 import './App.css';
+import {LoginScreen} from "./screens/LoginScreen";
+import {CreateAccountScreen} from "./screens/CreateAccountScreen";
+import {HomeScreen} from "./screens/HomeScreen";
 
 function App() {
 
 
     return (
-        <div className={"container"}>
-            <p className={"title"}>Welcome</p>
-
-            <div className={"temp-inputs"}>
-                <Login/>
-                <CreateAccount/>
-            </div>
-
-        </div>
+        <BrowserRouter>
+            <Switch>
+                <Route exact path={"/"}>
+                    <LoginScreen/>
+                </Route>
+                <Route path={"/create-account"}>
+                    <CreateAccountScreen/>
+                </Route>
+                <Route path={"/home"}>
+                    <HomeScreen/>
+                </Route>
+            </Switch>
+        </BrowserRouter>
     );
 }
 

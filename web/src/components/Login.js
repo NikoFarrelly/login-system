@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import axios from "axios";
+import {useHistory} from "react-router-dom";
 
 import {SERVER_URL} from "../constants";
 
@@ -8,27 +9,30 @@ import "./Login.css";
 export const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setLoading] = useState(false);
+
+    const history = useHistory();
 
     const onSubmit = (evt) => {
         evt.preventDefault();
-        axios
-            .post(`${SERVER_URL}/login`, {
-                username,
-                password
-            })
+        axios.post(`${SERVER_URL}/login`, {
+            username,
+            password
+        })
             .then(res => {
-                console.log('response:', res)
+                if (res.data.success) {
+                    history.push('/home');
+                } else {
+                    setLoading(false);
+                }
             })
             .catch(error => {
-                console.error(error)
-            }).finally(() => {
-            console.log('finished with request');
-        })
+                throw error;
+            })
     }
 
     return (
         <div className={"login_container"}>
-            <p className={"login_title"}>Login</p>
             <div className={"input_container"}>
                 <div className={"input_row"}>
                     <p className={"input_title"}>Username</p>
@@ -42,7 +46,13 @@ export const Login = () => {
                 </div>
             </div>
             <div className={"button_container"}>
-                <button className={"button"} onClick={onSubmit}>Submit</button>
+                <button className={"button"} onClick={onSubmit}>{isLoading ? "Loading.." : "Log in"}
+                </button>
+            </div>
+            <div className={"create_account_container"}>
+                <button className={"button"} onClick={() => history.push('/create-account')}>
+                    Create account
+                </button>
             </div>
         </div>
     )

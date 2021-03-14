@@ -40,13 +40,15 @@ app.get('/', (req, res) => {
 
 app.post('/login', async (req, res) => {
     const {username, password} = req.body;
-    const isValid = !!username && !!password;
+    const authUser = await authenticateUser(username, password);
+    const isValid = !!username && !!password && authUser;
     if (isValid) {
+
         res.status(200)
-        res.end();
+        res.end(JSON.stringify({success: true}));
     }
     res.status(500);
-    res.end()
+    res.end(JSON.stringify({success: false}))
 })
 
 app.post('/createAccount', async (req, res) => {
@@ -82,3 +84,10 @@ const checkUsernameExists = (username) =>
     );
 
 const writeUserToDB = async (user) => (await checkUsernameExists(user.username)) ? await writeNewUserToDB(user) : false;
+
+const authenticateUser = (username, password) =>
+    new Promise((res, rej) => connection.query("SELECT username, password FROM users WHERE username=? AND password=?", [username, password], (err, result) =>
+            err ? rej(err) : res(result.length === 1)
+        )
+    );
+

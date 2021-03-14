@@ -35,3 +35,9 @@ p {
 .button {
 
 }
+
+.create_account_container {
+    border-top: 1px solid pink;
+    margin-top: 25px;
+    padding-top: 25px;
+}
