@@ -9,21 +9,13 @@ export const CreateAccount = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const onSubmit = (evt) => {
+    const onSubmit = async (evt) => {
         evt.preventDefault();
-        axios
+        await axios
             .post(`${SERVER_URL}/createAccount`, {
                 username,
                 password
             })
-            .then(res => {
-                console.log('response:', res)
-            })
-            .catch(error => {
-                console.error(error)
-            }).finally(() => {
-            console.log('finished with request');
-        })
     }
 
     return (
